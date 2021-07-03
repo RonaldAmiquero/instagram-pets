@@ -5,10 +5,11 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  HttpLink,
-  from,
+  createHttpLink,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
+import { setContext } from '@apollo/client/link/context';
+import Context from './Context';
 
 const errorLink = onError(({ graphqlErrors, networkError }) => {
   if (graphqlErrors) {
@@ -18,19 +19,39 @@ const errorLink = onError(({ graphqlErrors, networkError }) => {
   }
 });
 
-const link = from([
+const httpLink = createHttpLink({
+  uri: 'https://petgram-server-ronald.vercel.app/graphql',
   errorLink,
-  new HttpLink({ uri: 'https://petgram-server-ronald.vercel.app/graphql' }),
-]);
+});
+
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = window.sessionStorage.getItem('token');
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
 
 const client = new ApolloClient({
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
-  link: link,
+  onError: onError(({ networkError }) => {
+    if (networkError && networkError.result.code === 'invalid_token') {
+      window.sessionStorage.removeItem('token');
+      window.location = '/user';
+    }
+  }),
 });
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
+  <Context.Provider>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </Context.Provider>,
   document.getElementById('app')
 );

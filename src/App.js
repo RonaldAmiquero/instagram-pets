@@ -1,26 +1,47 @@
-import React from 'react';
-import { ListOfCategory } from './components/ListOfCategory';
+import React, { useContext, Suspense } from 'react';
+import { Router, Redirect } from '@reach/router';
 import { GlobalStyle } from './styles/GlobalStyles';
-import { ListOfPhotoCardsWithQuery } from './container/ListOfPhotoCardsWithQuery';
+import { Home } from './pages/Home';
 import { Logo } from './components/Logo';
-import { PhotoCardWithQuery } from './container/PhotoCardWithQuery';
+/* import { Detail } from './pages/Detail'; */
+import { NavBar } from './components/NavBar';
+/* import { Favs } from './pages/Favs'; */
+import { User } from './pages/User';
+import { NotRegisteredUser } from './pages/NotRegisteredUser';
+import { NotFound } from './pages/NotFound';
+import { Context } from './Context';
+import {
+  ToastsContainer,
+  ToastsStore,
+  ToastsContainerPosition,
+} from 'react-toasts';
+import { Spinner } from './components/Spinner';
+const Favs = React.lazy(() => import('./pages/Favs'));
+const Detail = React.lazy(() => import('./pages/Detail'));
 
 export const App = () => {
-  const urlParams = new window.URLSearchParams(window.location.search);
-  const detailId = urlParams.get('detail');
-  console.log(detailId);
+  const { isAuth } = useContext(Context);
   return (
-    <>
+    <Suspense fallback={<Spinner />}>
       <GlobalStyle />
+      <ToastsContainer
+        store={ToastsStore}
+        position={ToastsContainerPosition.TOP_RIGHT}
+      />
       <Logo />
-      {detailId ? (
-        <PhotoCardWithQuery id={detailId} />
-      ) : (
-        <h1>
-          <ListOfCategory />
-          <ListOfPhotoCardsWithQuery categoryId={2} />
-        </h1>
-      )}
-    </>
+      <Router>
+        <NotFound default />
+        <Home path="/" />
+        <Home path="/pet/:categoryId" />
+        <Detail path="/detail/:detailId" />
+        {!isAuth && <NotRegisteredUser path="/login" />}
+        {!isAuth && <Redirect noThrow from="/favs" to="/login" />}
+        {!isAuth && <Redirect noThrow from="/user" to="/login" />}
+        {isAuth && <Redirect noThrow from="/login" to="/" />}
+        <Favs path="/favs" />
+        <User path="/user" />
+      </Router>
+      <NavBar />
+    </Suspense>
   );
 };

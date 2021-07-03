@@ -1,5 +1,4 @@
 import styled, { keyframes } from 'styled-components';
-
 const ldsFacebook = keyframes`
     0% {
         top: 6px;
@@ -10,7 +9,6 @@ const ldsFacebook = keyframes`
         height: 26px;
     }
 `;
-
 export const SquareLoading = styled.div`
   display: block;
   position: relative;

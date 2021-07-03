@@ -12,7 +12,7 @@ export function useCategoriesData() {
         .then((data) => setCategories(data))
         .catch((err) => setLoading(false));
       setLoading(false);
-    }, 4000);
+    }, 1000);
   }, []);
   return { categories, loading };
 }

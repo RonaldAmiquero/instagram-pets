@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Category } from '../Category';
-import { Loader } from '../Loadingtwo';
+import { Loader } from '../Loader';
 import { List, Item } from './styles';
 import { useCategoriesData } from '../../hooks/useCategoriesData';
 /* import { categories as mockCategories } from '../../../api/db.json'; */
 // mock - imitador de categories
-
-export const ListOfCategory = () => {
+const ListOfCategoriesComponent = () => {
   const { categories, loading } = useCategoriesData();
   const [showFixed, setShowFixed] = useState(false);
 
@@ -23,12 +22,12 @@ export const ListOfCategory = () => {
       {loading
         ? [1, 2, 3, 4, 5, 6, 7].map((id) => (
             <Item key={id}>
-              <Loader size={70} />
+              <Loader />
             </Item>
           ))
         : categories.map((category) => (
             <Item key={category.id}>
-              <Category {...category} />
+              <Category {...category} path={`/pet/${category.id}`} />
             </Item>
           ))}
     </List>
@@ -41,3 +40,5 @@ export const ListOfCategory = () => {
     </>
   );
 };
+
+export const ListOfCategories = React.memo(ListOfCategoriesComponent);
