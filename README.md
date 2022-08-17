@@ -1,3 +1,3 @@
 ## app-instagram-pets⚛️
 
-State: process
+Es una aplicación web tipo Instagram, pero para mascotas. Registrate(es temporal) y prueba las funcionalidades!!!
