@@ -9,7 +9,7 @@ export const NotRegisteredUser = () => {
   const { loginMutation, dataLogin, loadingLogin, errorLogin } =
     useLoginMutation();
   const { activateAuth } = useContext(Context);
-
+  console.log(errorLogin);
   const onSubmit = ({ email, password }) => {
     const input = { email, password };
     const variables = { input };
@@ -37,7 +37,6 @@ export const NotRegisteredUser = () => {
   };
   const errorMsgLogin =
     errorLogin && 'La contraseña es incorrecta o el usuario no existe';
-  console.log(errorLogin);
   return (
     <>
       <UserForm

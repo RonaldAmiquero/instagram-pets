@@ -1,0 +1,9 @@
+{
+    "baseUrl": "https://instagram-pets-ronaldamiquero.vercel.app",
+    "chromeWebSecurity": false,
+    "hosts": {
+        "*.localhost": "127.0.0.1"
+    },
+    "viewportWidth": 500,
+    "viewportHeight": 800
+}

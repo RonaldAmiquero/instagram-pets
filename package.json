@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "cypress:open": "cypress open",
         "build": "webpack --mode development",
         "start:dev": "npx serve dist -s",
         "serve:dev": "npm run build && npm run start:dev",
@@ -20,6 +20,7 @@
         "@babel/preset-env": "^7.14.2",
         "@babel/preset-react": "^7.13.13",
         "babel-loader": "^8.2.2",
+        "cypress": "^7.6.0",
         "html-webpack-plugin": "^5.3.1",
         "standard": "^16.0.3",
         "webpack": "^5.37.1",
